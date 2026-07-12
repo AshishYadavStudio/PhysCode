@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive Computational Physics learning platform with visualizations for B.Sc. Semester 5">
+    <title>PhysCode | Interactive Computational Physics</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- KaTeX for Math -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Highlight.js for Code Syntax -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">⚛</div>
+                <div class="brand-text">
+                    <h2>PhysCode</h2>
+                    <span class="brand-sub">Interactive Learning</span>
+                </div>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="topic-search" placeholder="🔍 Search topics...">
+            </div>
+            <nav id="nav-menu"></nav>
+        </aside>
+
+        <!-- Sidebar Toggle for Mobile -->
+        <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle navigation">☰</button>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="main-content"></main>
+    </div>
+
+    <!-- Core App -->
+    <script src="app.js"></script>
+    <!-- Content Modules -->
+    <script src="content-fundamentals.js"></script>
+    <script src="content-cpp-core.js"></script>
+    <script src="content-cpp-io.js"></script>
+    <script src="content-unit2.js"></script>
+</body>
+</html>
