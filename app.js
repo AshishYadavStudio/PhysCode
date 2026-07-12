@@ -70,6 +70,13 @@
                     3: 'Unit III – Forms & Backend',
                     4: 'Unit IV – MySQL Database'
                 };
+            } else if (this.currentSubject === 'os') {
+                unitLabels = {
+                    1: 'Unit I – OS Concepts & Arch',
+                    2: 'Unit II – Processes & Deadlocks',
+                    3: 'Unit III – Memory Management',
+                    4: 'Unit IV – I/O & Storage'
+                };
             }
 
             for (const unit of Object.keys(units).sort()) {
@@ -110,7 +117,17 @@
             document.getElementById('sidebar').classList.remove('open');
 
             if (id === 'home') {
-                main.innerHTML = this.renderHome();
+                main.innerHTML = this.renderGlobalHome();
+                main.scrollTop = 0;
+                return;
+            }
+            
+            if (id === 'physics' || id === 'web' || id === 'os') {
+                this.currentSubject = id;
+                const selector = document.getElementById('subject-selector');
+                if (selector) selector.value = id;
+                this.buildSidebar();
+                main.innerHTML = this.renderSubjectHome();
                 main.scrollTop = 0;
                 return;
             }
@@ -198,16 +215,45 @@
             });
         },
 
-        /* ===== HOME PAGE ===== */
-        renderHome() {
-            const unitTopics = { 1: [], 2: [] };
-            this.topics.forEach(t => {
+        /* ===== GLOBAL HOME PAGE ===== */
+        renderGlobalHome() {
+            return `
+                <div class="home-hero">
+                    <h1 class="gradient-text">PhysCode Learning Platform</h1>
+                    <p class="subtitle">Interactive educational modules for B.Sc. Semester 5</p>
+                </div>
+                <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top:2rem;">
+                    <div class="topic-card glass-panel" data-gradient="purple" onclick="location.hash='physics'">
+                        <span class="card-emoji">⚛</span>
+                        <h3>Computational Physics</h3>
+                        <p>Learn C++ basics and apply them to physics algorithms and equations.</p>
+                    </div>
+                    <div class="topic-card glass-panel" data-gradient="ocean" onclick="location.hash='web'">
+                        <span class="card-emoji">🌐</span>
+                        <h3>Internet Technologies</h3>
+                        <p>Master Web Programming, PHP, HTML Forms, and MySQL Databases.</p>
+                    </div>
+                    <div class="topic-card glass-panel" data-gradient="sunset" onclick="location.hash='os'">
+                        <span class="card-emoji">💻</span>
+                        <h3>Operating Systems</h3>
+                        <p>Explore Process Management, Deadlocks, Memory, and I/O Architecture.</p>
+                    </div>
+                </div>
+            `;
+        },
+
+        /* ===== SUBJECT HOME PAGE ===== */
+        renderSubjectHome() {
+            const filteredTopics = this.topics.filter(t => (t.subject || 'physics') === this.currentSubject);
+            const unitTopics = { 1: [], 2: [], 3: [], 4: [] };
+            filteredTopics.forEach(t => {
                 if (unitTopics[t.unit]) unitTopics[t.unit].push(t);
             });
 
             const gradients = ['purple', 'cool', 'warm', 'sunset', 'ocean'];
 
             function renderCards(topics) {
+                if (!topics || topics.length === 0) return '<p style="color:var(--text-secondary)">No topics available yet.</p>';
                 return topics.map((t, i) => `
                     <div class="topic-card glass-panel" data-gradient="${gradients[i % gradients.length]}" onclick="location.hash='${t.id}'">
                         <span class="card-emoji">${t.icon || '📄'}</span>
@@ -217,36 +263,40 @@
                 `).join('');
             }
 
-            return `
+            let subjectTitles = {
+                'physics': 'Computational Physics',
+                'web': 'Internet Technologies',
+                'os': 'Operating Systems'
+            };
+
+            let html = `
                 <div class="home-hero">
-                    <h1 class="gradient-text">Computational Physics</h1>
-                    <p class="subtitle">Interactive lessons, visualizations, and hands-on examples for B.Sc. Semester 5</p>
-                    <div class="home-stats">
-                        <div class="home-stat">
-                            <div class="stat-number gradient-text">${this.topics.length}</div>
-                            <div class="stat-label">Topics</div>
-                        </div>
-                        <div class="home-stat">
-                            <div class="stat-number gradient-text">2</div>
-                            <div class="stat-label">Units</div>
-                        </div>
-                        <div class="home-stat">
-                            <div class="stat-number gradient-text">50+</div>
-                            <div class="stat-label">Examples</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="unit-section">
-                    <h2><span class="unit-badge u1">Unit I</span> Fundamentals & C++ Programming</h2>
-                    <div class="cards-grid">${renderCards(unitTopics[1])}</div>
-                </div>
-
-                <div class="unit-section">
-                    <h2><span class="unit-badge u2">Unit II</span> Control Flow, Arrays & Programs</h2>
-                    <div class="cards-grid">${renderCards(unitTopics[2])}</div>
+                    <div class="topic-breadcrumb"><a href="#home" style="color:var(--text-secondary);text-decoration:none;">&larr; Back to Global Home</a></div>
+                    <h1 class="gradient-text">${subjectTitles[this.currentSubject]}</h1>
+                    <p class="subtitle">Select a topic below to begin learning.</p>
                 </div>
             `;
+            
+            let unitLabels = {};
+            if (this.currentSubject === 'physics') {
+                unitLabels = { 1: 'Fundamentals & C++', 2: 'Control Flow & Data' };
+            } else if (this.currentSubject === 'web') {
+                unitLabels = { 1: 'Intro & Internet Tech', 2: 'PHP & Strings', 3: 'Forms & Backend', 4: 'MySQL Database' };
+            } else {
+                unitLabels = { 1: 'OS Concepts & Arch', 2: 'Processes & Deadlocks', 3: 'Memory Management', 4: 'I/O & Storage' };
+            }
+
+            for (let i = 1; i <= 4; i++) {
+                if (unitTopics[i] && unitTopics[i].length > 0) {
+                    html += `
+                        <div class="unit-section">
+                            <h2><span class="unit-badge u${i}">Unit ${'I,II,III,IV'.split(',')[i-1]}</span> ${unitLabels[i]}</h2>
+                            <div class="cards-grid">${renderCards(unitTopics[i])}</div>
+                        </div>
+                    `;
+                }
+            }
+            return html;
         }
     };
 
