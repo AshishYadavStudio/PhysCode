@@ -7,6 +7,7 @@
     const APP = {
         topics: [],
         topicMap: {},
+        currentSubject: 'physics', // Default subject
 
         /* --- Register a topic from content modules --- */
         register(topic) {
@@ -16,6 +17,7 @@
 
         /* --- Initialize the application --- */
         init() {
+            this.setupSubjectSelector();
             this.buildSidebar();
             this.setupRouter();
             this.setupSearch();
@@ -23,11 +25,31 @@
             this.route();
         },
 
+        /* --- Setup Subject Selector --- */
+        setupSubjectSelector() {
+            const selector = document.getElementById('subject-selector');
+            if (selector) {
+                selector.addEventListener('change', (e) => {
+                    this.currentSubject = e.target.value;
+                    this.buildSidebar();
+                    // Go to home when switching subjects to avoid 404s
+                    window.location.hash = 'home';
+                });
+            }
+        },
+
         /* --- Build sidebar navigation from registered topics --- */
         buildSidebar() {
             const nav = document.getElementById('nav-menu');
             const units = {};
-            this.topics.forEach(t => {
+            
+            // Filter topics by current subject (default to 'physics' if no subject defined)
+            const filteredTopics = this.topics.filter(t => {
+                const subj = t.subject || 'physics';
+                return subj === this.currentSubject;
+            });
+
+            filteredTopics.forEach(t => {
                 const key = t.unit || 0;
                 if (!units[key]) units[key] = [];
                 units[key].push(t);
@@ -35,10 +57,20 @@
 
             let html = `<a href="#home" class="nav-item active" data-id="home">🏠 Home</a>`;
 
-            const unitLabels = {
-                1: 'Unit I – Fundamentals & C++',
-                2: 'Unit II – Control Flow & Data'
-            };
+            let unitLabels = {};
+            if (this.currentSubject === 'physics') {
+                unitLabels = {
+                    1: 'Unit I – Fundamentals & C++',
+                    2: 'Unit II – Control Flow & Data'
+                };
+            } else if (this.currentSubject === 'web') {
+                unitLabels = {
+                    1: 'Unit I – Intro & Internet Tech',
+                    2: 'Unit II – PHP & Strings',
+                    3: 'Unit III – Forms & Backend',
+                    4: 'Unit IV – MySQL Database'
+                };
+            }
 
             for (const unit of Object.keys(units).sort()) {
                 html += `<div class="nav-section">${unitLabels[unit] || 'Unit ' + unit}</div>`;
@@ -48,6 +80,12 @@
             }
 
             nav.innerHTML = html;
+            
+            // Re-apply search filter if there's an active query
+            const searchInput = document.getElementById('topic-search');
+            if (searchInput && searchInput.value) {
+                searchInput.dispatchEvent(new Event('input'));
+            }
         },
 
         /* --- Hash-based router --- */

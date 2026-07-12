@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/http.min.js"></script>
 
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -35,6 +38,10 @@
                 </div>
             </div>
             <div class="sidebar-search">
+                <select id="subject-selector" style="width: 100%; padding: 8px; margin-bottom: 10px; background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--glass-border); border-radius: 6px; outline: none;">
+                    <option value="physics">Computational Physics (C++)</option>
+                    <option value="web">Internet Technologies (PHP)</option>
+                </select>
                 <input type="text" id="topic-search" placeholder="🔍 Search topics...">
             </div>
             <nav id="nav-menu"></nav>
@@ -54,5 +61,9 @@
     <script src="content-cpp-core.js"></script>
     <script src="content-cpp-io.js"></script>
     <script src="content-unit2.js"></script>
+    <script src="content-web-unit1.js"></script>
+    <script src="content-web-unit2.js"></script>
+    <script src="content-web-unit3.js"></script>
+    <script src="content-web-unit4.js"></script>
 </body>
 </html>
